@@ -55,6 +55,7 @@ const Auth = () => {
       localStorage.setItem("token", login.data.token);
       localStorage.setItem("user", JSON.stringify(login.data.data.user));
       setIsLogin(true);
+      window.location.reload();
     } catch (err) {
       // console.log(err.response.data);
       alert(err.response.data.message);
@@ -64,6 +65,7 @@ const Auth = () => {
   const logoutHandler = () => {
     localStorage.clear();
     setIsLogin(false);
+    window.location.reload();
   };
 
   return isLogin ? (

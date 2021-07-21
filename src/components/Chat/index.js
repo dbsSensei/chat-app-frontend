@@ -119,9 +119,9 @@ const Chat = () => {
 
   return (
     <div>
-      <TestArea onMessage={sendMessage} />
+      {/* <TestArea onMessage={sendMessage} /> */}
 
-      <Launcher
+      {currentUser && <Launcher
         socket={socket}
         agentProfile={{
           teamName: "Company1",
@@ -146,7 +146,7 @@ const Chat = () => {
         // }}
         // onPinMessage={(value) => console.log('Testing', value)}
         placeholder="placeholder"
-      />
+      />}
     </div>
   );
 };
