@@ -30,11 +30,32 @@
   background-size: 100%;
   padding: 40px 0px;
 }
+.sc-chat-list:hover {
+  cursor: pointer;
+}
 
 .sc-chat-list.active {
   background: #ffebd2;
   /* margin: 8px 0;
   margin-top: 6px; */
+}
+
+.sc-header-list-add-input {
+  width: 80%;
+  border: 1px solid #0014ff2e;
+  border-radius: 10px;
+  height: 25px;
+  margin: auto;
+}
+
+.sc-header-list-add-button {
+  position: relative;
+  height: 25px;
+  top: -25px;
+  background: none;
+  border: 1px solid #0014ff2e;
+  border-radius: 10px;
+  margin-left: 111px;
 }
 
 .sc-chat-list div {

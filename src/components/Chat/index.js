@@ -43,6 +43,7 @@ const Chat = () => {
   // const [currentUser, setCurrentUser] = useState({});
 
   const [state, setState] = useState({
+    currentRoom:"",
     messageList: messageHistory,
     newMessagesCount: 0,
     isOpen: false,
@@ -56,6 +57,10 @@ const Chat = () => {
       ...state,
       messageList: [...state.messageList, message],
     }));
+  }
+
+  function onRoomChange(room) {
+    setState({...state,currentRoom:"jakarta"})
   }
 
   function onFilesSelected(fileList) {
@@ -131,6 +136,7 @@ const Chat = () => {
         onMessageWasSent={onMessageWasSent}
         onFilesSelected={onFilesSelected}
         messageList={state.messageList}
+        onRoomChange={onRoomChange}
         newMessagesCount={state.newMessagesCount}
         onClick={onClick}
         isOpen={state.isOpen}
@@ -139,7 +145,7 @@ const Chat = () => {
         // pinMessage={{
         //   id: 123,
         //   imageUrl:
-        //     'https://scontent.fcgk19-1.fna.fbcdn.net/v/t31.18172-8/18449719_288905068226376_1080667994610698649_o.jpg?_nc_cat=109&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeFMjYAfvNhdNncbWEs82aiUCY5gXC25-eMJjmBcLbn548yzmIHVGCCqSddZ4H9bT8QdJHM98a1mlS7rBHTSU3SG&_nc_ohc=odagtZ_d0ZoAX-9Hf24&_nc_ht=scontent.fcgk19-1.fna&oh=a359c307316a03898b01c19de4e8c556&oe=60F4AF35',
+        //     'https://images.glints.com/unsafe/glints-dashboard.s3.amazonaws.com/company-logo/6efea583856b540b27a74dfb66dc62cb.jpg',
         //   title:
         //     'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
         //   text: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',

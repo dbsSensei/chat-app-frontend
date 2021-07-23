@@ -1,11 +1,14 @@
-import React from 'react';
-import { Container, Row } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import MessageList from './MessageList';
-import UserInput from './UserInput';
-import Header from './Header';
-import PinMessage from './PinMessage';
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import { Container, Row } from "react-bootstrap";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import MessageList from "./MessageList";
+import UserInput from "./UserInput";
+import Header from "./Header";
+import PinMessage from "./PinMessage";
+
+const urlAPI = "http://localhost:3001";
 
 function ChatWindow(props) {
   const {
@@ -24,23 +27,77 @@ function ChatWindow(props) {
 
   const { teamName, imageUrl } = agentProfile;
 
+  const [rooms, setRooms] = useState([]);
+
+  const [currentRoom, setCurrentRoom] = useState({});
+  const [createRoomInput, setCreateRoomInput] = useState("");
+  const [buttonActive, setButtonActive] = useState("");
+  // const currentChat = rooms.filter((room) => room._id === buttonActive);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${urlAPI}/api/v1/rooms`,
+      responseType: "json",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    })
+      // .then((res) => res.json())
+      .then((roomsData) => {
+        // console.log(rooms)
+        setRooms([...rooms, ...roomsData.data.data.data]);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const addListHandler = (e) => {
+    e.preventDefault();
+    console.log(e);
+    // await axios({
+    //   method: "post",
+    //   url: `${urlAPI}/api/v1/rooms/createRoom`,
+    //   headers: {
+    //     Authorization: "Bearer " + localStorage.getItem("token"),
+    //   },
+    //   data: {
+    //     chatRoomId: "jakarta",
+    //     userId: user._id,
+    //     username: user.userName,
+    //     type: "emoji",
+    //     data: { emoji },
+    //   },
+    // });
+  };
+
   return (
     <div
       className={classNames(
-        'sc-chat-window',
+        "sc-chat-window",
         { opened: isOpen },
         { closed: !isOpen }
       )}
     >
-      <Header teamName={teamName} imageUrl={imageUrl} onClose={onClose} />
+      <Header
+        buttonActive={buttonActive}
+        currentRoom={currentRoom}
+        teamName={teamName}
+        imageUrl={imageUrl}
+        onClose={onClose}
+      />
 
       {pinMessage && (
         <PinMessage pinMessage={pinMessage} onPinMessage={onPinMessage} />
       )}
 
-      <MessageList messages={messageList} imageUrl={imageUrl} />
+      <MessageList
+        buttonActive={buttonActive}
+        messages={messageList}
+        imageUrl={imageUrl}
+      />
 
       <UserInput
+        buttonActive={buttonActive}
         socket={props.socket}
         onSubmit={onUserInputSubmit}
         onFilesSelected={onFilesSelected}
@@ -51,42 +108,49 @@ function ChatWindow(props) {
 
       <div
         className={classNames(
-          'sc-chat-window-list',
+          "sc-chat-window-list",
           { opened: isOpen },
           { closed: !isOpen }
         )}
       >
         <Container>
-          <Row className={'sc-header-list'}>
+          <Row className={"sc-header-list"}>
             <h3>Chat List</h3>
           </Row>
-          <Row className={'sc-chat-list active'}>
-            <div>
-              <img
-                alt='chat-list'
-                src='https://scontent.fcgk19-1.fna.fbcdn.net/v/t31.18172-8/18449719_288905068226376_1080667994610698649_o.jpg?_nc_cat=109&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeFMjYAfvNhdNncbWEs82aiUCY5gXC25-eMJjmBcLbn548yzmIHVGCCqSddZ4H9bT8QdJHM98a1mlS7rBHTSU3SG&_nc_ohc=odagtZ_d0ZoAX-9Hf24&_nc_ht=scontent.fcgk19-1.fna&oh=a359c307316a03898b01c19de4e8c556&oe=60F4AF35'
+          <Row>
+            <form onSubmit={(e) => addListHandler(e)}>
+              <input
+                className={"sc-header-list-add-input"}
+                value={createRoomInput}
+                onChange={(e) => setCreateRoomInput(e.target.value)}
               />
-              <span>Company1</span>
-            </div>
+              <button className={"sc-header-list-add-button"}>
+                <i style={{ color: "#605bfb" }} className="fa fa-search" />
+              </button>
+            </form>
           </Row>
-          <Row className={'sc-chat-list'}>
-            <div>
-              <img
-                alt='chat-list'
-                src='https://scontent.fcgk19-1.fna.fbcdn.net/v/t31.18172-8/18449719_288905068226376_1080667994610698649_o.jpg?_nc_cat=109&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeFMjYAfvNhdNncbWEs82aiUCY5gXC25-eMJjmBcLbn548yzmIHVGCCqSddZ4H9bT8QdJHM98a1mlS7rBHTSU3SG&_nc_ohc=odagtZ_d0ZoAX-9Hf24&_nc_ht=scontent.fcgk19-1.fna&oh=a359c307316a03898b01c19de4e8c556&oe=60F4AF35'
-              />
-              <span>Company2</span>
-            </div>
-          </Row>
-          <Row className={'sc-chat-list'}>
-            <div>
-              <img
-                alt='chat-list'
-                src='https://scontent.fcgk19-1.fna.fbcdn.net/v/t31.18172-8/18449719_288905068226376_1080667994610698649_o.jpg?_nc_cat=109&ccb=1-3&_nc_sid=09cbfe&_nc_eui2=AeFMjYAfvNhdNncbWEs82aiUCY5gXC25-eMJjmBcLbn548yzmIHVGCCqSddZ4H9bT8QdJHM98a1mlS7rBHTSU3SG&_nc_ohc=odagtZ_d0ZoAX-9Hf24&_nc_ht=scontent.fcgk19-1.fna&oh=a359c307316a03898b01c19de4e8c556&oe=60F4AF35'
-              />
-              <span>Company3</span>
-            </div>
-          </Row>
+          {rooms.map((room) => {
+            console.log(room);
+            return (
+              <Row
+                onClick={(e) => {
+                  console.log(e.target.id);
+                  props.onRoomChange(room._id);
+                  setButtonActive(room._id);
+                  setCurrentRoom(room);
+                }}
+                id={room._id}
+                className={`sc-chat-list ${
+                  buttonActive === room._id ? "active" : ""
+                }`}
+              >
+                <div id={room._id}>
+                  <img id={room._id} alt="chat-list" src={room.img} />
+                  <span id={room._id}>{room.name}</span>
+                </div>
+              </Row>
+            );
+          })}
         </Container>
       </div>
     </div>

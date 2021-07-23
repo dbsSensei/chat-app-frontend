@@ -196,42 +196,44 @@ class UserInput extends Component {
   render() {
     const { emojiPickerIsOpen, inputActive } = this.state;
     return (
-      <form className={`sc-user-input ${inputActive ? "active" : ""}`}>
-        <div
-          role="button"
-          tabIndex="0"
-          onFocus={() => {
-            this.setState({ inputActive: true });
-          }}
-          onBlur={() => {
-            this.setState({ inputActive: false });
-          }}
-          ref={(e) => {
-            this.userInput = e;
-          }}
-          onKeyDown={this.handleKeyDown.bind(this)}
-          onKeyUp={this.handleKeyUp.bind(this)}
-          contentEditable="true"
-          placeholder={this.props.placeholder}
-          className="sc-user-input--text"
-        />
+      this.props.buttonActive && (
+        <form className={`sc-user-input ${inputActive ? "active" : ""}`}>
+          <div
+            role="button"
+            tabIndex="0"
+            onFocus={() => {
+              this.setState({ inputActive: true });
+            }}
+            onBlur={() => {
+              this.setState({ inputActive: false });
+            }}
+            ref={(e) => {
+              this.userInput = e;
+            }}
+            onKeyDown={this.handleKeyDown.bind(this)}
+            onKeyUp={this.handleKeyUp.bind(this)}
+            contentEditable="true"
+            placeholder={this.props.placeholder}
+            className="sc-user-input--text"
+          />
 
-        <div className="sc-user-input--buttons">
-          <div className="sc-user-input--button" />
+          <div className="sc-user-input--buttons">
+            <div className="sc-user-input--button" />
 
-          <div className="sc-user-input--button">
-            {this.props.showEmoji && (
-              <EmojiIcon
-                onClick={this.toggleEmojiPicker}
-                isActive={emojiPickerIsOpen}
-                tooltip={this._renderEmojiPopup()}
-              />
-            )}
+            <div className="sc-user-input--button">
+              {this.props.showEmoji && (
+                <EmojiIcon
+                  onClick={this.toggleEmojiPicker}
+                  isActive={emojiPickerIsOpen}
+                  tooltip={this._renderEmojiPopup()}
+                />
+              )}
+            </div>
+
+            {this._renderSendOrFileIcon()}
           </div>
-
-          {this._renderSendOrFileIcon()}
-        </div>
-      </form>
+        </form>
+      )
     );
   }
 }

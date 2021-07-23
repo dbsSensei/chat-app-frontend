@@ -95,6 +95,7 @@ function Launcher(props) {
         agentProfile={agentProfile}
         isOpen={state.isOpen}
         onClose={onClick}
+        onRoomChange={props.onRoomChange}
         showEmoji={showEmoji}
         fileUpload={fileUpload}
         pinMessage={pinMessage}
